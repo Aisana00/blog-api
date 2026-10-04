@@ -1,4 +1,5 @@
-from pathlib import Path 
+from pathlib import Path
+
 from decouple import AutoConfig, Csv
 
 SETTINGS_DIR=Path(__file__).resolve().parent

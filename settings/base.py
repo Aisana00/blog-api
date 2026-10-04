@@ -1,5 +1,4 @@
-from pathlib import Path 
-from settings.conf import ALLOWED_HOSTS, SECRET_KEY
+from pathlib import Path
 
 BASE_DIR=Path(__file__).resolve().parent.parent
 LOGS_DIR=BASE_DIR / "logs"
