@@ -1,0 +1,45 @@
+{% extends "admin/base.html" %}
+{% load i18n unfold %}
+
+{% block breadcrumbs %}{% endblock %}
+
+{% block title %}
+    {{ title }} | {{ site_title|default:_("Django site admin") }}
+{% endblock %}
+
+{% block branding %}
+    <h1 id="site-name">
+        <a href="{% url 'admin:index' %}">{{ site_header|default:_("Django administration") }}</a>
+    </h1>
+{% endblock %}
+
+{% block content %}
+    {% component "unfold/components/container.html" %}
+
+        {% component "unfold/components/flex.html" with class="gap-4 mb-8 flex-col lg:flex-row" %}
+            {% for card in cards %}
+                {% component "unfold/components/card.html" with class="lg:w-1/4" title=card.title %}
+                    {% component "unfold/components/title.html" %}{{ card.value }}{% endcomponent %}
+                {% endcomponent %}
+            {% endfor %}
+        {% endcomponent %}
+
+        {% component "unfold/components/flex.html" with class="gap-4 mb-8 flex-col lg:flex-row" %}
+            {% component "unfold/components/card.html" with class="lg:w-1/2" title="Posts per category" %}
+                {% component "unfold/components/chart/bar.html" with data=chart_data height=300 %}{% endcomponent %}
+            {% endcomponent %}
+
+            {% component "unfold/components/card.html" with class="lg:w-1/2" title="Top 5 authors" %}
+                {% component "unfold/components/table.html" with table=top_authors_table card_included=1 striped=1 %}{% endcomponent %}
+            {% endcomponent %}
+        {% endcomponent %}
+
+        {% component "unfold/components/card.html" with title="Published vs drafts" %}
+            {% component "unfold/components/flex.html" with class="flex-col gap-4" %}
+                {% component "unfold/components/progress.html" with title="Published" description=published_text value=published_percent %}{% endcomponent %}
+                {% component "unfold/components/progress.html" with title="Drafts" description=drafts_text value=drafts_percent %}{% endcomponent %}
+            {% endcomponent %}
+        {% endcomponent %}
+
+    {% endcomponent %}
+{% endblock %}
