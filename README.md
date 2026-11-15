@@ -92,3 +92,23 @@ The admin panel uses [Django Unfold](https://unfoldadmin.com/):
 
 ### User list
 ![User list](docs/screenshots/user_list.png)
+
+## Queries
+
+```bash
+python manage.py queries                   # все запросы, кроме 40–44
+python manage.py queries --number 31       # только один запрос
+python manage.py queries --number 6 --sql  # с SQL-текстом
+```
+
+Пример вывода:
+
+```
+#31 categories_with_post_count — 1 SQL query
+  Databases {'post_count': 17}
+  Django {'post_count': 16}
+  Security {'post_count': 16}
+  DevOps {'post_count': 12}
+  JavaScript {'post_count': 11}
+  (8 rows)
+```

@@ -1,5 +1,6 @@
 # Python modules
 import random
+from datetime import timedelta
 import time
 from typing import Any
 
@@ -12,6 +13,7 @@ from django.core.management.base import (
     CommandParser,
 )
 from django.db import transaction
+from django.utils import timezone
 from django.utils.text import slugify
 from faker import Faker
 
@@ -22,6 +24,11 @@ User = get_user_model()
 fake = Faker()
 
 DEFAULT_USERS = 20
+DATE_RANGE_DAYS = 365
+EDITED_SHARE=0.3
+EDIT_MIN_DAYS=1
+EDIT_MAX_DAYS=30
+SECONDS_IN_DAY = 86400
 DEFAULT_POSTS = 100
 DEFAULT_COMMENTS = 500
 
@@ -305,6 +312,19 @@ class Command(BaseCommand):
             )
 
         Post.objects.bulk_create(posts)
+        now = timezone.now()
+        for post in posts:
+            post.created_at = now - timedelta(
+                seconds=random.randint(0, DATE_RANGE_DAYS * SECONDS_IN_DAY)
+            )
+            if random.random() < EDITED_SHARE:
+                edited_at = post.created_at + timedelta(
+                    days=random.randint(EDIT_MIN_DAYS, EDIT_MAX_DAYS)
+                )
+                post.updated_at = min(edited_at, now)
+            else:
+                post.updated_at = post.created_at
+        Post.objects.bulk_update(posts, ["created_at", "updated_at"])            
 
         post: Post
         for post in posts:
@@ -351,4 +371,11 @@ class Command(BaseCommand):
             for _ in range(count)
         ]
         Comment.objects.bulk_create(comments)
+        now = timezone.now()
+        for comment in comments:
+            seconds=int((now-comment.post.created_at).total_seconds())
+            comment.created_at = comment.post.created_at + timedelta(
+                seconds=random.randint(0, max(seconds, 0))
+            )
+        Comment.objects.bulk_update(comments, ["created_at"])    
         return len(comments)
