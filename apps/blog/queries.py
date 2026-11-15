@@ -7,8 +7,21 @@ from typing import Any
 from django.contrib.auth import get_user_model
 from django.db import transaction
 from django.db.models import (
-    Avg, Case, CharField, Count, Exists, F, Max, Min, OuterRef,
-    Prefetch, Q, QuerySet, Subquery, Value, When,
+    Avg,
+    Case,
+    CharField,
+    Count,
+    Exists,
+    F,
+    Max,
+    Min,
+    OuterRef,
+    Prefetch,
+    Q,
+    QuerySet,
+    Subquery,
+    Value,
+    When,
 )
 from django.db.models.functions import Coalesce, Concat, TruncMonth
 from django.utils import timezone
